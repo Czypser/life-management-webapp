@@ -65,7 +65,7 @@ export class Ingredients extends Component ::
     let ingredients = this.state.ingredients.map @ this.renderIngredients
 
     return @
-      <div className="container">
+      <div>
         <div className="row">
           <IngLabels />
         </div>

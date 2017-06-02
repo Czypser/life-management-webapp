@@ -22,9 +22,10 @@ class Application extends React.Component ::
             <Header input="New app!"/>
           </div>
           <ViewRecipe />
-          <div className="row">
-            <Ingredients />
-          </div>
+          <Form />
+          <Ingredients />
+
+
 
 
           {/*
