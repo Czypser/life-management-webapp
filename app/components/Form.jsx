@@ -31,7 +31,7 @@ export class Form extends React.Component ::
               <label for="recipeTime">Recipe Time</label>
               <input className="u-full-width recipeInput" type="title" placeholder="Total prep and cook time?" id="recipeTime"/>
             </div>
-          </div>               
+          </div>
           <div className="row">
             <div className="eight columns">          
               <label for="exampleMessage">Message</label>
@@ -40,7 +40,9 @@ export class Form extends React.Component ::
                 <input type="checkbox"/>
                 <span className="label-body">Send a copy to yourself</span>
               </label>
-              <input className="button-primary" type="submit" value="Submit"/>
+              <button className="button-primary" type="submit">
+                <i className="fa fa-floppy-o" aria-hidden="true"></i> Save
+              </button>
             </div>
           </div>
         </form>

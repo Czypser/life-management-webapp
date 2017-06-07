@@ -41,17 +41,35 @@ export class Ingredients extends Component ::
           , fat: this.refs.fat.value
           , calories: this.refs.calories.value
 
-    this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:""
+    this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:"Ingredient Added Successfully"
     this.clearInputs()
 
-  warnEmptyTitleField = () => ::
-    this.setState @ @{} ingredientTitleErr:"You must provide a name for a new ingredient"
+  warnEmptyTitleField = (x) => ::
+    this.setState @ @{} ingredientTitleErr:"You must provide " + x + " for a new ingredient"
 
 
   addIngredientClickHandler = (e) => ::
-    this.refs.ingredientname.value == "" 
-      ? this.warnEmptyTitleField()
+    this.refs.ingredientAmount.value == ""
+      ? this.warnEmptyTitleField("an Amount")
       : this.addIngredient()
+    // this.refs.ingredientUnit.value == ""
+    //   ? this.warnEmptyTitleField("a Unit")
+    //   : this.addIngredient()
+    // this.refs.ingredientname.value == "" 
+    //   ? this.warnEmptyTitleField("an Ingredient Name")
+    //   : this.addIngredient()
+    // this.refs.carbs.value == ""
+    //   ? this.warnEmptyTitleField("carbs")
+    //   : this.addIngredient()
+    // this.refs.protein.value == "" 
+    //   ? this.warnEmptyTitleField("protein")
+    //   : this.addIngredient()
+    // this.refs.fat.value == ""
+    //   ? this.warnEmptyTitleField("fat")
+    //   : this.addIngredient()
+    // this.refs.calories.value == "" 
+    //   ? this.warnEmptyTitleField("calories")
+    //   : this.addIngredient()               
 
   // Instead of that big long addition of all the individual things
       // lets just pass the ingredient in, and let IngredientListing
@@ -90,10 +108,14 @@ export class Ingredients extends Component ::
             <input ref="calories" className="u-full-width recipeInput" placeholder="(kcal)"/>
           </div>                                    
           <div className="one columns">
-            <button onClick={this.addIngredientClickHandler}> Add Ingredient 
+            <button className="button-primary" onClick={this.addIngredientClickHandler}> 
+              <i className="fa fa-plus" aria-hidden="true"></i> Add Ingredient
             </button>
-          </div>                                          
-        </div>             
+          </div>
+          <div className="Row">
+               <p ref="ingredientTitleError" className="err">{this.state.ingredientTitleErr}</p>
+          </div>           
+        </div>                    
         {ingredients}
         <TotalsView ingredients={this.state.ingredients}/>
       </div>
