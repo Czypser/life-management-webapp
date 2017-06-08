@@ -9,7 +9,7 @@ export class Ingredients extends Component ::
   constructor (props) ::
     super(props)
     const sampleIngredient = new Ingredient @ 
-      @{} ingredientAmount: "1"
+      @{} ingredientAmount: 1
         , ingredientUnit: "ounces"
         , name: "Delicous Food"
         , carbs: "15"
@@ -19,6 +19,7 @@ export class Ingredients extends Component ::
     this.state = 
       @{} ingredients:[sampleIngredient] 
         , ingredientTitleErr: ""
+        , ingredientSuccess: ""
         , idx: 0
 
   clearInputs() ::
@@ -41,35 +42,53 @@ export class Ingredients extends Component ::
           , fat: this.refs.fat.value
           , calories: this.refs.calories.value
 
-    this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:"Ingredient Added Successfully"
+    this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:"", ingredientSuccess: "Ingredient Added Successfully"
     this.clearInputs()
 
   warnEmptyTitleField = (x) => ::
-    this.setState @ @{} ingredientTitleErr:"You must provide " + x + " for a new ingredient"
+    this.setState @ @{} 
+      ingredientTitleErr:"You must enter these required fields: " + x
 
 
   addIngredientClickHandler = (e) => ::
+    var warning = ""
     this.refs.ingredientAmount.value == ""
-      ? this.warnEmptyTitleField("an Amount")
-      : this.addIngredient()
-    // this.refs.ingredientUnit.value == ""
-    //   ? this.warnEmptyTitleField("a Unit")
-    //   : this.addIngredient()
-    // this.refs.ingredientname.value == "" 
-    //   ? this.warnEmptyTitleField("an Ingredient Name")
-    //   : this.addIngredient()
-    // this.refs.carbs.value == ""
-    //   ? this.warnEmptyTitleField("carbs")
-    //   : this.addIngredient()
-    // this.refs.protein.value == "" 
-    //   ? this.warnEmptyTitleField("protein")
-    //   : this.addIngredient()
-    // this.refs.fat.value == ""
-    //   ? this.warnEmptyTitleField("fat")
-    //   : this.addIngredient()
-    // this.refs.calories.value == "" 
-    //   ? this.warnEmptyTitleField("calories")
-    //   : this.addIngredient()               
+      ? warning += "Amount"
+      : warning += ""    
+    this.refs.ingredientUnit.value == ""
+      ? warning != ""
+        ? warning += ", Unit"
+        : warning += "Unit"
+      : warning += ""  
+    this.refs.ingredientname.value == "" 
+      ? warning != ""
+        ? warning += ", Ingredient Name"
+        : warning += "Ingredient Name"
+      : warning += "" 
+    this.refs.carbs.value == ""
+      ? warning != ""
+        ? warning += ", Net Carbs"
+        : warning += "Net Carbs"
+      : warning += "" 
+    this.refs.protein.value == "" 
+      ? warning != ""
+        ? warning += ", Protein"
+        : warning += "Protein"
+      : warning += "" 
+    this.refs.fat.value == ""
+      ? warning != ""
+        ? warning += ", Fat"
+        : warning += "Fat"
+      : warning += "" 
+    this.refs.calories.value == "" 
+      ? warning != ""
+        ? warning += ", Calories"
+        : warning += "Calories"
+      : warning += "" 
+    warning != ""
+      ? this.warnEmptyTitleField(warning)
+      : this.addIngredient()     
+
 
   // Instead of that big long addition of all the individual things
       // lets just pass the ingredient in, and let IngredientListing
@@ -79,8 +98,13 @@ export class Ingredients extends Component ::
       return (<IngredientListing key={idx} idx={idx} ingredient={ing}/>)
 
   render() ::
-
+    let validation = null
     let ingredients = this.state.ingredients.map @ this.renderIngredients
+    if (this.state.ingredientTitleErr == "") {
+      validation = <p ref="ingredientTitleError" className="success">{this.state.ingredientSuccess}</p>               
+    } else {
+      validation = <p ref="ingredientSuccess" className="err">{this.state.ingredientTitleErr}</p>
+    }
 
     return @
       <div>
@@ -89,33 +113,31 @@ export class Ingredients extends Component ::
         </div>
         <div className="row">
           <div className="three columns">
-            <input ref="ingredientAmount" className="four columns recipeInput" placeholder="#"/>
+            <input type="number" ref="ingredientAmount" className="four columns recipeInput" placeholder="#"/>
             <input ref="ingredientUnit" className="eight columns recipeInput" placeholder="unit"/>                          
           </div>
           <div className="three columns">
             <input ref="ingredientname" className="u-full-width recipeInput" placeholder="Name of ingredient"/>
           </div>
           <div className="oneAndOneHalf columns">             
-            <input ref="carbs" className="u-full-width recipeInput" placeholder="(g)"/>
+            <input type="number" ref="carbs" className="u-full-width recipeInput" placeholder="(g)"/>
           </div>
           <div className="oneAndOneHalf columns">          
-            <input ref="protein" className="u-full-width recipeInput" placeholder="(g)"/>
+            <input type="number" ref="protein" className="u-full-width recipeInput" placeholder="(g)"/>
           </div>
           <div className="oneAndOneHalf columns">           
-            <input ref="fat" className="u-full-width recipeInput" placeholder="(g)"/>
+            <input type="number" ref="fat" className="u-full-width recipeInput" placeholder="(g)"/>
           </div>
           <div className="oneAndOneHalf columns">         
-            <input ref="calories" className="u-full-width recipeInput" placeholder="(kcal)"/>
+            <input type="number" ref="calories" className="u-full-width recipeInput" placeholder="(kcal)"/>
           </div>                                    
           <div className="one columns">
             <button className="button-primary" onClick={this.addIngredientClickHandler}> 
               <i className="fa fa-plus" aria-hidden="true"></i> Add Ingredient
             </button>
           </div>
-          <div className="Row">
-               <p ref="ingredientTitleError" className="err">{this.state.ingredientTitleErr}</p>
-          </div>           
-        </div>                    
+        </div>  
+        {validation}                                               
         {ingredients}
         <TotalsView ingredients={this.state.ingredients}/>
       </div>
@@ -131,4 +153,3 @@ class Ingredient ::
     this.fat = config.fat + "g"
     this.calories = config.calories + "kcal"
     */
-

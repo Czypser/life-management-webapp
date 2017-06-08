@@ -8,5 +8,6 @@ Object.assign @ exports
   , require('./IngredientComponents/IngredientListing.jsx')
   , require('./IngredientComponents/IngLabels.jsx')
   , require('./IngredientComponents/TotalsView.jsx')
+  , require('./Testing.jsx')
 
 
