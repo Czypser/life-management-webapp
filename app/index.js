@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import {Header, Footer, Form, DocumentsFieldSet, Ingredients, ViewRecipe} from './components'
-import Game from './components/Testing.jsx'
+import Testing from './components/Testing.jsx'
 
 // CSS IMPORTS
 
@@ -23,7 +23,7 @@ class Application extends React.Component ::
             <Header input="New app!"/>
           </div>
           <ViewRecipe />
-          <Ingredients />
+          <Testing />
 
 
 
