@@ -43,12 +43,25 @@ export default class Testing extends React.Component ::
       <div>
         The website for this is <a href="http://rickharrison.github.io/validate.js/">validate-js</a>
         <form name="example_form" action="#" method="POST">
-          <input name="req" id="req"/>
-          <input name="alphanumeric" id="alphanumeric"/>
-          <input name="password" id="password" type="password"/>
-          <input name="password_confirm" id="password_confirm" type="password"/>
-          <input name="email" id="email"/>
-          <input name="minlength" id="minlength"/>
-          <button className="button-primary" type="submit" name="submit">Submit</button>
+          <div className="row"></div>
+            <label> Req </label>
+            <input name="req" id="req"/>
+          <div className ="row"></div>
+            <label> Alphanumeric </label>
+            <input name="alphanumeric" id="alphanumeric"/>
+          <div className="row"></div>
+            <label> Password </label>
+            <input name="password" id="password" type="password"/>
+          <div className="row"></div>
+            <label> Password Confirm </label>  
+            <input name="password_confirm" id="password_confirm" type="password"/>
+          <div className="row"></div>
+            <label> Email </label>  
+            <input name="email" id="email"/>
+          <div className="row"></div>
+            <label> Min Length </label>  
+            <input name="minlength" id="minlength"/>
+          <div className="row"></div>
+            <button className="button-primary" type="submit" name="submit">Submit</button>
         </form>
       </div>  
