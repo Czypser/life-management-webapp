@@ -45,54 +45,29 @@ export class Ingredients extends Component ::
     this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:"", ingredientSuccess: "Ingredient Added Successfully"
     this.clearInputs()
 
-  warnEmptyTitleField = (x) => ::
+  warnEmptyTitleField = (warning, offenders) => ::
+    console.log @ offenders
     this.setState @ @{} 
-      ingredientTitleErr:"You must enter these required fields: " + x
+          boxesToHighlight: offenders
+        , ingredientTitleErr:"You must enter these required fields: " + warning
 
 
   addIngredientClickHandler = (e) => ::
-    var warning = ""
-    this.refs.ingredientAmount.value == ""
-      ? warning += "Amount"
-      : warning += ""    
-    this.refs.ingredientUnit.value == ""
-      ? warning != ""
-        ? warning += ", Unit"
-        : warning += "Unit"
-      : warning += ""  
-    this.refs.ingredientname.value == "" 
-      ? warning != ""
-        ? warning += ", Ingredient Name"
-        : warning += "Ingredient Name"
-      : warning += "" 
-    this.refs.carbs.value == ""
-      ? warning != ""
-        ? warning += ", Net Carbs"
-        : warning += "Net Carbs"
-      : warning += "" 
-    this.refs.protein.value == "" 
-      ? warning != ""
-        ? warning += ", Protein"
-        : warning += "Protein"
-      : warning += "" 
-    this.refs.fat.value == ""
-      ? warning != ""
-        ? warning += ", Fat"
-        : warning += "Fat"
-      : warning += "" 
-    this.refs.calories.value == "" 
-      ? warning != ""
-        ? warning += ", Calories"
-        : warning += "Calories"
-      : warning += "" 
-    warning != ""
-      ? this.warnEmptyTitleField(warning)
-      : this.addIngredient()     
+    e.preventDefault()
+    let refinputs = Object.keys @ this.refs
+    console.log @ {refinputs}
 
+    let warning = ""
+    let offenders = []
+    for (let ingredient of refinputs) ::
+      if this.refs[ingredient].value == "" ::
+        if warning != "" ::
+          warning += ", "
+          offenders.push @ this.refs[ingredient]
+        warning += `${ingredient}`
 
-  // Instead of that big long addition of all the individual things
-      // lets just pass the ingredient in, and let IngredientListing
-      // handle it
+    "" !== warning ? this.warnEmptyTitleField(warning, offenders) : this.addIngredient()
+
 
   renderIngredients = (ing, idx) => :: 
       return (<IngredientListing key={idx} idx={idx} ingredient={ing}/>)
@@ -103,8 +78,27 @@ export class Ingredients extends Component ::
     if (this.state.ingredientTitleErr == "") {
       validation = <p ref="ingredientTitleError" className="success">{this.state.ingredientSuccess}</p>               
     } else {
-      validation = <p ref="ingredientSuccess" className="err">{this.state.ingredientTitleErr}</p>
-    }
+      validation = <p ref="ingredientSuccess" className="err">{this.state.ingredientTitleErr}</p>}
+      
+    let inputconfig = @{}
+        style:"u-full-width recipeInput"
+      , placeholder:"(g)"
+      , ref:"carbs"
+      , name:"carbs"
+
+    function buildNumInput (object) {
+       // if object.name is in this.state.boxesToHighlight
+       //   let style = object.style += " highlight-input"
+      // check this.state.boxesToHighlight
+        // check that against the thing were are building
+        // if they are the same
+      
+      return (
+        <div className="oneAndOneHalf columns">             
+            <input type="number" ref={object.ref} className={object.style} placeholder={object.placeholder}/>
+        </div> )}
+
+    let carbs = buildNumInput(inputconfig)
 
     return @
       <div>
@@ -119,9 +113,7 @@ export class Ingredients extends Component ::
           <div className="three columns">
             <input ref="ingredientname" className="u-full-width recipeInput" placeholder="Name of ingredient"/>
           </div>
-          <div className="oneAndOneHalf columns">             
-            <input type="number" ref="carbs" className="u-full-width recipeInput" placeholder="(g)"/>
-          </div>
+          {carbs}
           <div className="oneAndOneHalf columns">          
             <input type="number" ref="protein" className="u-full-width recipeInput" placeholder="(g)"/>
           </div>
