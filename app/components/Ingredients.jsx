@@ -21,15 +21,13 @@ export class Ingredients extends Component ::
         , ingredientTitleErr: ""
         , ingredientSuccess: ""
         , idx: 0
+        , boxesToHighlight: []
 
-  clearInputs() ::
-    this.refs.ingredientAmount.value = ""
-    this.refs.ingredientUnit.value = ""
-    this.refs.ingredientname.value = ""
-    this.refs.carbs.value = ""
-    this.refs.protein.value = ""
-    this.refs.fat.value = ""
-    this.refs.calories.value = ""
+  clearInputs = (e) => ::
+    let refinputs = Object.keys @ this.refs
+    for (let ingredient of refinputs) ::
+      this.refs[ingredient].value = ""
+      console.log @ this.refs[ingredient].id
 
   addIngredient = () => ::
     let ingredients = Array.from @  this.state.ingredients
@@ -42,7 +40,12 @@ export class Ingredients extends Component ::
           , fat: this.refs.fat.value
           , calories: this.refs.calories.value
 
-    this.setState @ @{} ingredients: ingredients, idx:this.state.idx + 1, ingredientTitleErr:"", ingredientSuccess: "Ingredient Added Successfully"
+    this.setState @ 
+      @{} ingredients: ingredients
+        , idx:this.state.idx + 1
+        , ingredientTitleErr:""
+        , ingredientSuccess: "Ingredient Added Successfully"
+        , boxesToHighlight: []
     this.clearInputs()
 
   warnEmptyTitleField = (warning, offenders) => ::
@@ -55,17 +58,14 @@ export class Ingredients extends Component ::
   addIngredientClickHandler = (e) => ::
     e.preventDefault()
     let refinputs = Object.keys @ this.refs
-    console.log @ {refinputs}
-
     let warning = ""
     let offenders = []
     for (let ingredient of refinputs) ::
       if this.refs[ingredient].value == "" ::
         if warning != "" ::
           warning += ", "
-          offenders.push @ this.refs[ingredient]
-        warning += `${ingredient}`
-
+        offenders.push @ this.refs[ingredient].id
+        warning += `${ingredient}`    
     "" !== warning ? this.warnEmptyTitleField(warning, offenders) : this.addIngredient()
 
 
@@ -84,21 +84,57 @@ export class Ingredients extends Component ::
         style:"u-full-width recipeInput"
       , placeholder:"(g)"
       , ref:"carbs"
-      , name:"carbs"
+      , label:"Net Carbs"
+      , id:"carbs"
 
-    function buildNumInput (object) {
+    let inputconfig2 = @{}
+        style:"u-full-width recipeInput"
+      , placeholder:"(g)"
+      , ref:"protein"
+      , label:"Protein"
+      , id:"protein"      
+
+    let inputconfig3 = @{}
+        style:"u-full-width recipeInput"
+      , placeholder:"(g)"
+      , ref:"fat"
+      , label:"Fat"
+      , id:"fat"      
+
+    let inputconfig4 = @{}
+        style:"u-full-width recipeInput"
+      , placeholder:"(g)"
+      , ref:"calories"
+      , label:"Calories"
+      , id:"calories"
+
+
+    let boxesToHighlight = this.state.boxesToHighlight
+    
+    console.log @ 
+      "Boxes to highlight " + 
+      this.state.boxesToHighlight
+
+    function buildNumInput (object, highlightWarning) {
+      const ObjectMap = highlightWarning.map((highlightWarning) => object.ref == highlightWarning ? object.style = "u-full-width recipeInput warningbox" : highlightWarning += "Nope")
+
+
        // if object.name is in this.state.boxesToHighlight
        //   let style = object.style += " highlight-input"
       // check this.state.boxesToHighlight
         // check that against the thing were are building
         // if they are the same
-      
       return (
-        <div className="oneAndOneHalf columns">             
-            <input type="number" ref={object.ref} className={object.style} placeholder={object.placeholder}/>
+        <div className="oneAndOneHalf columns"> 
+            <label> {object.label} </label>           
+            <input id={object.id} type="number" ref={object.ref} className={object.style} placeholder={object.placeholder}/>
         </div> )}
 
-    let carbs = buildNumInput(inputconfig)
+    let carbs = buildNumInput(inputconfig, boxesToHighlight)
+    let protein = buildNumInput(inputconfig2, boxesToHighlight)
+    let fat = buildNumInput(inputconfig3, boxesToHighlight)
+    let calories = buildNumInput(inputconfig4, boxesToHighlight)
+
 
     return @
       <div>
@@ -107,22 +143,16 @@ export class Ingredients extends Component ::
         </div>
         <div className="row">
           <div className="three columns">
-            <input type="number" ref="ingredientAmount" className="four columns recipeInput" placeholder="#"/>
-            <input ref="ingredientUnit" className="eight columns recipeInput" placeholder="unit"/>                          
+            <input id ="ingredientAmount" type="number" ref="ingredientAmount" className="four columns recipeInput" placeholder="#"/>
+            <input id= "ingredientUnit" ref="ingredientUnit" className="eight columns recipeInput" placeholder="unit"/>                          
           </div>
           <div className="three columns">
-            <input ref="ingredientname" className="u-full-width recipeInput" placeholder="Name of ingredient"/>
+            <input id="ingredientname" ref="ingredientname" className="u-full-width recipeInput" placeholder="Name of ingredient"/>
           </div>
           {carbs}
-          <div className="oneAndOneHalf columns">          
-            <input type="number" ref="protein" className="u-full-width recipeInput" placeholder="(g)"/>
-          </div>
-          <div className="oneAndOneHalf columns">           
-            <input type="number" ref="fat" className="u-full-width recipeInput" placeholder="(g)"/>
-          </div>
-          <div className="oneAndOneHalf columns">         
-            <input type="number" ref="calories" className="u-full-width recipeInput" placeholder="(kcal)"/>
-          </div>                                    
+          {protein}
+          {fat}
+          {calories}                                   
           <div className="one columns">
             <button className="button-primary" onClick={this.addIngredientClickHandler}> 
               <i className="fa fa-plus" aria-hidden="true"></i> Add Ingredient
