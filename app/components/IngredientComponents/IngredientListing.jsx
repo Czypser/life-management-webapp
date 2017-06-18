@@ -21,16 +21,16 @@ export default class IngredientListing extends Component ::
                 {name}         
             </div>
             <div className="oneAndOneHalf columns">
-                {carbs*ingredientAmount}g
+                {carbs}g
             </div>
             <div className="oneAndOneHalf columns">
-                {protein*ingredientAmount}g
+                {protein}g
             </div>
             <div className="oneAndOneHalf columns">
-                {fat*ingredientAmount}g
+                {fat}g
             </div>
             <div className="oneAndOneHalf columns">
-                {calories*ingredientAmount}kcal
+                {calories}kcal
             </div>                        
         </div>
         </div>  

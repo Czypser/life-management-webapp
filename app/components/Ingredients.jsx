@@ -9,13 +9,13 @@ export class Ingredients extends Component ::
   constructor (props) ::
     super(props)
     const sampleIngredient = new Ingredient @ 
-      @{} ingredientAmount: 1
-        , ingredientUnit: "ounces"
+      @{} ingredientUnit: "1 ounces"
         , name: "Delicous Food"
         , carbs: "15"
         , protein: "16"
         , fat: "17"
         , calories: "18"
+
     this.state = 
       @{} ingredients:[sampleIngredient] 
         , ingredientTitleErr: ""
@@ -32,9 +32,8 @@ export class Ingredients extends Component ::
   addIngredient = () => ::
     let ingredients = Array.from @  this.state.ingredients
     ingredients.push @ new Ingredient @ 
-        @{} ingredientAmount: this.refs.ingredientAmount.value
-          , ingredientUnit: this.refs.ingredientUnit.value
-          , name: this.refs.ingredientname.value 
+        @{} ingredientUnit: this.refs.ingredientUnit.value
+          , name: this.refs.ingredientName.value 
           , carbs: this.refs.carbs.value
           , protein: this.refs.protein.value
           , fat: this.refs.fat.value
@@ -86,16 +85,17 @@ export class Ingredients extends Component ::
 
     const makeinputconfig = (name) => ::
       return @{}
-          style: "u-full-width recipeInput" 
+          style: "u-full-width recipeInput"
         , placeholder: "(g)" 
         , ref: name 
         , label: cap @ name 
-        , id: name 
+        , id: name
+        , columns: name + " columns"
 
     const _makeinput = (config) => ::
-      const {label, id, ref, style, placeholder} = config
+      const {label, id, ref, style, placeholder, columns} = config
       return (
-          <div className="oneAndOneHalf columns"> 
+          <div className={columns}> 
               <label> {label} </label>           
               <input id={id} type="number" 
                   ref={ref} className={style} 
@@ -107,7 +107,7 @@ export class Ingredients extends Component ::
       return inputs.map @ match
 
       function match(item) ::
-        let matched = 
+        let matched =
           -1 !== offenders.indexOf(item.ref)
             ? addwarningstyle @ item
             : item
@@ -123,24 +123,16 @@ export class Ingredients extends Component ::
       return configsWithWarnings.map @ _makeinput
 
     // main part of the code right here
-    let inputConfigs = ["carbs", "protein", "fat", "calories"].map @ makeinputconfig
+    let inputConfigs = ["ingredientUnit", "ingredientName", "carbs", "protein", "fat", "calories"].map @ makeinputconfig
     // since produce inputs returns a list, we can destructure that list like this
-    let [carbs, protein, fat, calories] = produceInputs(inputConfigs)
+    let [ingredientUnit, ingredientName, carbs, protein, fat, calories] = produceInputs(inputConfigs)
 
 
     return @
       <div>
         <div className="row">
-          <IngLabels />
-        </div>
-        <div className="row">
-          <div className="three columns">
-            <input id ="ingredientAmount" type="number" ref="ingredientAmount" className="four columns recipeInput" placeholder="#"/>
-            <input id= "ingredientUnit" ref="ingredientUnit" className="eight columns recipeInput" placeholder="unit"/>                          
-          </div>
-          <div className="three columns">
-            <input id="ingredientname" ref="ingredientname" className="u-full-width recipeInput" placeholder="Name of ingredient"/>
-          </div>
+          {ingredientUnit}
+          {ingredientName}
           {carbs}
           {protein}
           {fat}

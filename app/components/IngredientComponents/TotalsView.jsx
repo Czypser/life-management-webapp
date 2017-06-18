@@ -22,9 +22,8 @@ export default class TotalsView extends Component ::
       fat += Number(e[1])
       protein += Number(e[2])
       calories += Number(e[3])
-      ingredientAmount +=  Number(e[4])
       ingredientUnit += Number(e[5])
-    return {carbs, fat, protein, calories, ingredientAmount, ingredientUnit}
+    return {carbs, fat, protein, calories, ingredientUnit}
 
   render() ::
     // We got a list of Ingredient instances, so we are going
