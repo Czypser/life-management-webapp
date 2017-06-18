@@ -79,61 +79,53 @@ export class Ingredients extends Component ::
       validation = <p ref="ingredientTitleError" className="success">{this.state.ingredientSuccess}</p>               
     } else {
       validation = <p ref="ingredientSuccess" className="err">{this.state.ingredientTitleErr}</p>}
-      
-    let inputconfig = @{}
-        style:"u-full-width recipeInput"
-      , placeholder:"(g)"
-      , ref:"carbs"
-      , label:"Net Carbs"
-      , id:"carbs"
-
-    let inputconfig2 = @{}
-        style:"u-full-width recipeInput"
-      , placeholder:"(g)"
-      , ref:"protein"
-      , label:"Protein"
-      , id:"protein"      
-
-    let inputconfig3 = @{}
-        style:"u-full-width recipeInput"
-      , placeholder:"(g)"
-      , ref:"fat"
-      , label:"Fat"
-      , id:"fat"      
-
-    let inputconfig4 = @{}
-        style:"u-full-width recipeInput"
-      , placeholder:"(g)"
-      , ref:"calories"
-      , label:"Calories"
-      , id:"calories"
 
 
-    let boxesToHighlight = this.state.boxesToHighlight
-    
-    console.log @ 
-      "Boxes to highlight " + 
-      this.state.boxesToHighlight
+    let capitolize = word => `${word[0].toUpperCase()}${word.slice(1)}`
+    let cap = word => capitolize @ word.toLowerCase()
 
-    function buildNumInput (object, highlightWarning) {
-      const ObjectMap = highlightWarning.map((highlightWarning) => object.ref == highlightWarning ? object.style = "u-full-width recipeInput warningbox" : highlightWarning += "Nope")
+    const makeinputconfig = (name) => ::
+      return @{}
+          style: "u-full-width recipeInput" 
+        , placeholder: "(g)" 
+        , ref: name 
+        , label: cap @ name 
+        , id: name 
 
-
-       // if object.name is in this.state.boxesToHighlight
-       //   let style = object.style += " highlight-input"
-      // check this.state.boxesToHighlight
-        // check that against the thing were are building
-        // if they are the same
+    const _makeinput = (config) => ::
+      const {label, id, ref, style, placeholder} = config
       return (
-        <div className="oneAndOneHalf columns"> 
-            <label> {object.label} </label>           
-            <input id={object.id} type="number" ref={object.ref} className={object.style} placeholder={object.placeholder}/>
-        </div> )}
+          <div className="oneAndOneHalf columns"> 
+              <label> {label} </label>           
+              <input id={id} type="number" 
+                  ref={ref} className={style} 
+                  placeholder={placeholder}/>
+          </div> )
 
-    let carbs = buildNumInput(inputconfig, boxesToHighlight)
-    let protein = buildNumInput(inputconfig2, boxesToHighlight)
-    let fat = buildNumInput(inputconfig3, boxesToHighlight)
-    let calories = buildNumInput(inputconfig4, boxesToHighlight)
+
+    let checkForMissingInput = (inputs, offenders) => ::
+      return inputs.map @ match
+
+      function match(item) ::
+        let matched = 
+          -1 !== offenders.indexOf(item.ref)
+            ? addwarningstyle @ item
+            : item
+
+        return matched
+
+      function addwarningstyle(item) ::
+        item.style += " warningbox"
+        return item
+
+    const produceInputs = (configs) => ::
+      let configsWithWarnings = checkForMissingInput @ configs, this.state.boxesToHighlight
+      return configsWithWarnings.map @ _makeinput
+
+    // main part of the code right here
+    let inputConfigs = ["carbs", "protein", "fat", "calories"].map @ makeinputconfig
+    // since produce inputs returns a list, we can destructure that list like this
+    let [carbs, protein, fat, calories] = produceInputs(inputConfigs)
 
 
     return @
