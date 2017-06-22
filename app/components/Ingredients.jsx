@@ -23,6 +23,7 @@ export class Ingredients extends Component ::
         , idx: 0
         , boxesToHighlight: []
 
+
   clearInputs = (e) => ::
     let refinputs = Object.keys @ this.refs
     for (let ingredient of refinputs) ::
@@ -86,7 +87,7 @@ export class Ingredients extends Component ::
     const makeinputconfig = (name) => ::
       return @{}
           style: "u-full-width recipeInput"
-        , placeholder: "(g)" 
+        , placeholder: ingredientPlaceHolder(name) 
         , ref: name 
         , label: cap @ name 
         , id: name
@@ -101,6 +102,20 @@ export class Ingredients extends Component ::
                   ref={ref} className={style} 
                   placeholder={placeholder}/>
           </div> )
+
+    let ingredientPlaceHolder = (name) => ::
+      if (name == "carbs" || name == "protein" || name == "fat") {
+        return ("(g)")
+      }
+      if (name == "ingredientUnit") {
+        return ("Unit of Measurement")
+      }
+      if (name == "ingredientName") {
+        return ("Name of the Ingredient")
+      }
+      if (name == "calories") {
+        return ("(kcal")
+      }
 
 
     let checkForMissingInput = (inputs, offenders) => ::
