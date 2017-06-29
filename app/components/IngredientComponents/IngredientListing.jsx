@@ -5,17 +5,12 @@ export default class IngredientListing extends Component ::
     super(props)
 
   render() ::
-    let {name, carbs, protein, fat, calories, ingredientAmount, ingredientUnit} = this.props.ingredient
+    let {name, carbs, protein, fat, calories, ingredientAmount, count} = this.props.ingredient
     return @
         <div>
         <div className="row" key={this.props.idx}>
             <div className="three columns">
-              <div className="four columns">
-                {ingredientAmount}
-              </div>
-              <div className="eight columns">
-                {ingredientUnit}
-              </div>
+                {count}
             </div>
             <div className="three columns">
                 {name}         

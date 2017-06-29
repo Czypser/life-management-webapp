@@ -6,14 +6,13 @@ export default class TotalsView extends Component ::
 
   buildTotals() ::
     let nutritionTotals = this.props.ingredients.map @ 
-      (item) => [item.carbs, item.fat, item.protein, item.calories, item.ingredientAmount]
+      (item) => [item.carbs, item.fat, item.protein, item.calories, item.count]
     // Initialize the total variables
     let protein = 0
       , carbs = 0
       , calories = 0
       , fat = 0
-      , ingredientAmount = 0
-      , ingredientUnit = 0
+      , count = 0
 
     // for each four item list in our list of ingredients
     for let e of nutritionTotals ::
@@ -22,15 +21,15 @@ export default class TotalsView extends Component ::
       fat += Number(e[1])
       protein += Number(e[2])
       calories += Number(e[3])
-      ingredientUnit += Number(e[5])
-    return {carbs, fat, protein, calories, ingredientUnit}
+      count += Number(e[5])
+    return {carbs, fat, protein, calories, count}
 
   render() ::
     // We got a list of Ingredient instances, so we are going
       // to map through and create four element lists for
       // each ingredient, containing each number
 
-    let {carbs, fat, protein, calories, ingredientAmount} = this.buildTotals()
+    let {carbs, fat, protein, calories, count} = this.buildTotals()
     return @
         <div className="container">
           <div className="row text-center">

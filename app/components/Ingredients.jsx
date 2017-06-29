@@ -9,7 +9,7 @@ export class Ingredients extends Component ::
   constructor (props) ::
     super(props)
     const sampleIngredient = new Ingredient @ 
-      @{} ingredientUnit: "1 ounces"
+      @{} count: "1 ounces"
         , name: "Delicous Food"
         , carbs: "15"
         , protein: "16"
@@ -33,7 +33,7 @@ export class Ingredients extends Component ::
   addIngredient = () => ::
     let ingredients = Array.from @  this.state.ingredients
     ingredients.push @ new Ingredient @ 
-        @{} ingredientUnit: this.refs.ingredientUnit.value
+        @{} count: this.refs.count.value
           , name: this.refs.ingredientName.value 
           , carbs: this.refs.carbs.value
           , protein: this.refs.protein.value
@@ -87,7 +87,7 @@ export class Ingredients extends Component ::
     const makeinputconfig = (name) => ::
       return @{}
           style: "u-full-width recipeInput"
-        , placeholder: ingredientPlaceHolder(name) 
+        , placeholder: ingredientPlaceHolder[name] 
         , ref: name 
         , label: cap @ name 
         , id: name
@@ -103,20 +103,13 @@ export class Ingredients extends Component ::
                   placeholder={placeholder}/>
           </div> )
 
-    let ingredientPlaceHolder = (name) => ::
-      if (name == "carbs" || name == "protein" || name == "fat") {
-        return ("(g)")
-      }
-      if (name == "ingredientUnit") {
-        return ("Unit of Measurement")
-      }
-      if (name == "ingredientName") {
-        return ("Name of the Ingredient")
-      }
-      if (name == "calories") {
-        return ("(kcal")
-      }
-
+    const ingredientPlaceHolder = 
+      @{} carbs: "(g)"
+        , protein: "(g)"
+        , fat: "(g)"
+        , count: "Ex: 5 lbs"
+        , ingredientName: "Ex: Almonds"
+        , calories: "(kcal)"
 
     let checkForMissingInput = (inputs, offenders) => ::
       return inputs.map @ match
@@ -138,15 +131,16 @@ export class Ingredients extends Component ::
       return configsWithWarnings.map @ _makeinput
 
     // main part of the code right here
-    let inputConfigs = ["ingredientUnit", "ingredientName", "carbs", "protein", "fat", "calories"].map @ makeinputconfig
+    let inputConfigs = ["count", "ingredientName", "carbs", "protein", "fat", "calories"].map @ makeinputconfig
     // since produce inputs returns a list, we can destructure that list like this
-    let [ingredientUnit, ingredientName, carbs, protein, fat, calories] = produceInputs(inputConfigs)
+    let [count, ingredientName, carbs, protein, fat, calories] = produceInputs(inputConfigs)
+    console.log @ count
 
 
     return @
       <div>
         <div className="row">
-          {ingredientUnit}
+          {count}
           {ingredientName}
           {carbs}
           {protein}
@@ -158,7 +152,7 @@ export class Ingredients extends Component ::
             </button>
           </div>
         </div>  
-        {validation}                                               
+        {validation}                                             
         {ingredients}
         <TotalsView ingredients={this.state.ingredients}/>
       </div>
